@@ -77,28 +77,29 @@ def handle_user_query(query, context):
     prompt = ChatPromptTemplate.from_template("""
 你是一个专门解决人情世故问题的AI助手。你的任务是帮助用户解决送礼和社交场合中的各种难题。在回答用户问题时，请遵循以下指导：
 
-1. 参考原则：参考遵守原则向量库中的内容。这些原则是处理人情世故问题的经验。
-2. 案例参考：在给出建议时，你可以参考案例向量库中的相关内容。这些案例可以帮助你提供更具体、更贴近实际的建议。
+1. 参考原则：着重参考遵守原则向量库中的内容。这些原则是处理人情世故问题的经验。
+2. 案例参考：在给出建议时，着重参考案例向量库中的相关内容。这些案例可以帮助你提供更具体、更贴近实际的建议。
 3. 回答结构：简要重述问题，给出基于原则的建议，举例说明，最后总结。
 4. 语气和风格：保持友好、耐心和体贴的语气，使用礼貌、得体的措辞。
 5. 如果涉及未明确提到的情况，进行合理推断，但要明确指出。
 6. 不要引用用户不知道的东西，直接输出建议和话术。
 
-对方背景信息：
+对方背景信息(用来给参考原则和案例提供信息)：
 身份：{identity}
 性别：{gender}
 家庭背景：{family_background}
 事前背景：{prior_context}
+性格特点：{personality}
 
 用户问题：{query}
 
-相关原则：
+相关原则(这里的内容要着重参考)：
 {principles}
 
-相关案例：
+相关案例(这里的内容要着重参考)：
 {examples}
 
-请根据以上信息，提供你的建议：
+请根据以上信息，特别是考虑对方的性格特点，提供你的建议：
 """)
     
     # 初始化 LLM
@@ -112,7 +113,8 @@ def handle_user_query(query, context):
          "identity": lambda x: context['identity'],
          "gender": lambda x: context['gender'],
          "family_background": lambda x: context['familyBackground'],
-         "prior_context": lambda x: context['priorContext']}
+         "prior_context": lambda x: context['priorContext'],
+         "personality": lambda x: context['personality']}  # 添加性格特点
         | prompt
         | model
         | StrOutputParser()
@@ -123,17 +125,17 @@ def handle_user_query(query, context):
     
     return response
 
-# 使用示例
-if __name__ == "__main__":
-    if principles_store is None or examples_store is None:
-        print("无法创建向量存储。请检查数据目录和文件。")
-    else:
-        query = "如何在领导生日时送礼？"
-        context = {
-            "identity": "员工",
-            "gender": "男",
-            "familyBackground": "普通家庭",
-            "priorContext": "无"
-        }
-        response = handle_user_query(query, context)
-        print(response)
+# 使用示例（已注释）
+# if __name__ == "__main__":
+#     if principles_store is None or examples_store is None:
+#         print("无法创建向量存储。请检查数据目录和文件。")
+#     else:
+#         query = "如何在领导生日时送礼？"
+#         context = {
+#             "identity": "员工",
+#             "gender": "男",
+#             "familyBackground": "普通家庭",
+#             "priorContext": "无"
+#         }
+#         response = handle_user_query(query, context)
+#         print(response)

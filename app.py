@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, jsonify
-from rag_system import handle_user_query  # 导入您的AI模块中的函数
+from rag_system import handle_user_query  # 导入您的RAG系统中的函数
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=["GET"])
 def index():
     return render_template('index.html')
 
@@ -14,7 +14,8 @@ def ask():
         "identity": data['identity'],
         "gender": data['gender'],
         "familyBackground": data['familyBackground'],
-        "priorContext": data['priorBackground']  # 注意这里的键名变化
+        "priorContext": data['priorBackground'],
+        "personality": data['personality']  # 添加性格特点
     }
     query = data['userInput']
 
