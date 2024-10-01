@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI对话程序</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #e8f5e9;
+            color: #1b5e20;
+        }
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .input-group input, .input-group textarea {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            background-color: #f1f8e9;
+        }
+        #chatBox {
+            height: 400px;
+            border: 2px solid #4caf50;
+            border-radius: 10px;
+            overflow-y: scroll;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+        }
+        #userInput {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            background-color: #f1f8e9;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .user-message {
+            background-color: #c8e6c9;
+            text-align: right;
+        }
+        .ai-message {
+            background-color: #dcedc8;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI对话程序</h1>
+    <div class="input-group">
+        <input type="text" id="identity" placeholder="对方的身份">
+        <input type="text" id="gender" placeholder="性别">
+    </div>
+    <div class="input-group">
+        <textarea id="familyBackground" placeholder="家庭背景"></textarea>
+        <textarea id="priorBackground" placeholder="事前背景"></textarea>
+    </div>
+    <div id="chatBox"></div>
+    <input type="text" id="userInput" placeholder="输入你的消息...">
+    <button onclick="sendMessage()">发送</button>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
