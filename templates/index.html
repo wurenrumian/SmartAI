@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>人情世故AI智能体</title>
+    <title>人情世故问答系统</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         body, html {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -87,7 +88,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>人情世故AI智能体</h1>
+        <h1>人情世故问答系统</h1>
         <div class="input-group">
             <input type="text" id="identity" placeholder="对方的身份">
             <input type="text" id="gender" placeholder="性别">
@@ -105,6 +106,22 @@
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                title: '欢迎使用我们的系统!',
+                html: `
+                    为了获得更好的回答，请确保您的问题具体到以下方面：
+                    <br>- 说什么话
+                    <br>- 做什么事
+                    <br>- 送什么礼
+                    <br><br>
+                    例如，不要问"如何表达感谢?"，而是问"感谢朋友帮忙搬家，应该说什么话?"
+                `,
+                icon: 'info',
+                confirmButtonText: '我明白了'
+            });
+        });
+
         function sendMessage() {
             var userInput = document.getElementById('userInput').value;
             var identity = document.getElementById('identity').value;
