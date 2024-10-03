@@ -56,7 +56,7 @@ principles_store = create_vector_store("Data/Principles", "principles_vector_sto
 # 创建案例向量存储
 examples_store = create_vector_store("Data/Examples", "examples_vector_store")
 
-def search_relevant_info(query, k=2):
+def search_relevant_info(query, k=3):  # 增加 k 的默认值
     principles_results = principles_store.similarity_search(query, k=k)
     examples_results = examples_store.similarity_search(query, k=k)
     
@@ -66,16 +66,16 @@ def search_relevant_info(query, k=2):
     }
 
 def format_docs(docs):
-    return "\n\n".join(doc.page_content for doc in docs)[:1000]  # 限制长度为1000字符
+    return "\n\n".join(doc.page_content for doc in docs)[:1500]  # 增加长度限制到1500字符
 
 # 添加新的函数来处理用户查询
 def handle_user_query(query, context):
     # 搜索相关信息
-    results = search_relevant_info(query)
+    results = search_relevant_info(query, k=3)  # 增加检索的文档数量
     
     # 构建 prompt
     prompt = ChatPromptTemplate.from_template("""
-你是一个专门解决人情世故问题的AI助手。你的任务是帮助用户解决送礼和社交场合中的各种难题。在回答用户问题时，请遵循以下指导：
+你是一个专门解决人情世故问题的AI助手。你的任务是帮助用户解决送礼和社交场合中的各种难题。在回答用户问题时，请严格遵循以下指导：
 
 1. 参考原则：着重参考遵守原则向量库中的内容。这些原则是处理人情世故问题的经验。
 2. 案例参考：在给出建议时，着重参考案例向量库中的相关内容。这些案例可以帮助你提供更具体、更贴近实际的建议。
@@ -83,6 +83,7 @@ def handle_user_query(query, context):
 4. 语气和风格：保持友好、耐心和体贴的语气，使用礼貌、得体的措辞。
 5. 如果涉及未明确提到的情况，进行合理推断，但要明确指出。
 6. 不要引用用户不知道的东西，直接输出建议和话术。
+7. 确保你的回答中至少70%的内容直接来自于或基于提供的原则和案例，但不能与用户的要求混淆。
 
 对方背景信息(用来给参考原则和案例提供信息)：
 身份：{identity}
@@ -99,11 +100,11 @@ def handle_user_query(query, context):
 相关案例(这里的内容要着重参考)：
 {examples}
 
-请根据以上信息，特别是考虑对方的性格特点，提供你的建议：
+请根据以上信息，特别是要考虑对方的综合条件（性格特点、家庭背景、事前背景），提供你的详细建议：
 """)
     
-    # 初始化 LLM
-    model = ChatOpenAI(temperature=0.7, max_tokens=1000)
+    # 初始化 LLM，降低 temperature 值
+    model = ChatOpenAI(temperature=0.65, max_tokens=1000)  # 将 temperature 从 0.7 降低到 0.5
     
     # 创建处理链
     chain = (
